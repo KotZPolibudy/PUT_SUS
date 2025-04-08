@@ -20,20 +20,35 @@ def print_metrics(regressor, description, X, y):
     print()
 
 
+# Funkcja rysująca wykres
+def draw_and_save_plot(x, y, title, ylabel, filename=None):
+    plt.figure(figsize=(8, 6))
+    plt.bar(x, y, color='skyblue' if title == "R^2" else ('lightgreen' if title == "MAE" else 'salmon'))
+    plt.title(title)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    if filename:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        plt.savefig(filename)
+    else:
+        plt.show()
+    plt.close()
+
+
 # Wczytanie danych
 dane = pd.read_csv("151879-regression.txt", sep="\t")
 
-# Indeksowanie danych (korzystając z Pandas)
-Xregr = dane.iloc[:, 0:-1].values  # Wszystkie kolumny oprócz ostatniej
-yregr = dane.iloc[:, -1].values    # Ostatnia kolumna
+Xregr = dane.iloc[:, 0:-1].values
+yregr = dane.iloc[:, -1].values
 
 regressors = {
-    'Linear Regression': linear_model.LinearRegression(),
-    'KNeighbors Regressor': neighbors.KNeighborsRegressor(),
-    'Decision Tree Regressor (max_depth=2)': DecisionTreeRegressor(max_depth=2),
-    'MLP Regressor': MLPRegressor(max_iter=1000),
+    'Linear': linear_model.LinearRegression(),
+    'KNeighbors': neighbors.KNeighborsRegressor(),
+    'Decision Tree': DecisionTreeRegressor(max_depth=2),
+    'MLP': MLPRegressor(max_iter=1000),
     'SVR Linear': SVR(kernel='linear'),
-    'SVR RBF': SVR(kernel='rbf')
+    'SVR RBF': SVR(kernel='rbf'),
+    'Full Decision Tree': DecisionTreeRegressor()
 }
 results = {
     'Model': [],
@@ -50,31 +65,11 @@ for name, model in regressors.items():
     results['MAE'].append(mean_absolute_error(yregr, y_pred))
     results['RMSE'].append(np.sqrt(mean_squared_error(yregr, y_pred)))
 
-# Tworzenie DataFrame z wynikami
+
 df_results = pd.DataFrame(results)
-
-# Wykresy
-fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-
-# R^2
-axes[0].bar(df_results['Model'], df_results['R^2'], color='skyblue')
-axes[0].set_title("R^2")
-axes[0].set_ylabel("R^2")
-
-# MAE
-axes[1].bar(df_results['Model'], df_results['MAE'], color='lightgreen')
-axes[1].set_title("MAE")
-axes[1].set_ylabel("MAE")
-
-# RMSE
-axes[2].bar(df_results['Model'], df_results['RMSE'], color='salmon')
-axes[2].set_title("RMSE")
-axes[2].set_ylabel("RMSE")
-
-plt.tight_layout()
-zapisz_do = "wykresy/regresje.png"
-os.makedirs(os.path.dirname(zapisz_do), exist_ok=True)
-plt.savefig(zapisz_do)
+draw_and_save_plot(df_results['Model'], df_results['R^2'], "R^2", "R^2", "wykresy/regresja_r2.png")
+draw_and_save_plot(df_results['Model'], df_results['MAE'], "MAE", "MAE", "wykresy/regresja_mae.png")
+draw_and_save_plot(df_results['Model'], df_results['RMSE'], "RMSE", "RMSE", "wykresy/regresja_rmse.png")
 
 # Wypisanie wyników dla wszystkich modeli
 for name, model in regressors.items():
