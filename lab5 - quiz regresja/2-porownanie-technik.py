@@ -8,6 +8,8 @@ from sklearn.svm import SVR
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import os
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 
 # Funkcja obliczająca i wyświetlająca metryki
@@ -57,6 +59,19 @@ results = {
     'RMSE': []
 }
 
+regressors_normalized = {
+    'Linear': make_pipeline(StandardScaler(), linear_model.LinearRegression()),
+    'KNeighbors': make_pipeline(StandardScaler(), neighbors.KNeighborsRegressor()),
+    'Decision Tree': make_pipeline(StandardScaler(), DecisionTreeRegressor(max_depth=2)),
+    'MLP': make_pipeline(StandardScaler(), MLPRegressor(max_iter=1000)),
+    'SVR Linear': make_pipeline(StandardScaler(), SVR(kernel='linear')),
+    'SVR RBF': make_pipeline(StandardScaler(), SVR(kernel='rbf'))
+}
+
+results_normalized = {
+    'Model': [], 'R^2': [], 'MAE': [], 'RMSE': []
+}
+"""
 for name, model in regressors.items():
     model.fit(Xregr, yregr)
     y_pred = model.predict(Xregr)
@@ -73,4 +88,23 @@ draw_and_save_plot(df_results['Model'], df_results['RMSE'], "RMSE", "RMSE", "wyk
 
 # Wypisanie wyników dla wszystkich modeli
 for name, model in regressors.items():
+    print_metrics(model, name, Xregr, yregr)
+"""
+
+for name, model in regressors_normalized.items():
+    model.fit(Xregr, yregr)
+    y_pred = model.predict(Xregr)
+    results_normalized['Model'].append(name)
+    results_normalized['R^2'].append(r2_score(yregr, y_pred))
+    results_normalized['MAE'].append(mean_absolute_error(yregr, y_pred))
+    results_normalized['RMSE'].append(np.sqrt(mean_squared_error(yregr, y_pred)))
+
+
+df_results_normalized = pd.DataFrame(results_normalized)
+draw_and_save_plot(df_results_normalized['Model'], df_results_normalized['R^2'], "R^2 (Normalizacja)", "R^2", "wykresy/regresja_r2_normalized.png")
+draw_and_save_plot(df_results_normalized['Model'], df_results_normalized['MAE'], "MAE (Normalizacja)", "MAE", "wykresy/regresja_mae_normalized.png")
+draw_and_save_plot(df_results_normalized['Model'], df_results_normalized['RMSE'], "RMSE (Normalizacja)", "RMSE", "wykresy/regresja_rmse_normalized.png")
+
+# Wypisanie wyników dla wszystkich modeli
+for name, model in regressors_normalized.items():
     print_metrics(model, name, Xregr, yregr)
