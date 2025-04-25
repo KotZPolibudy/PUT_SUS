@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 
 N_points = 40
 N_neurons = 10
-sigma = 3
-learning_rate = 0.4
+sigma = 1.0001
+learning_rate = 0.5
 neighborhood_function = 'gaussian'
 random_seed = 0
 
 start_iterations = 5
-end_iterations = 116
-step_iterations = 10
+end_iterations = 464
+step_iterations = 40
 
 t = np.linspace(0, np.pi * 2, N_points)
 x = t
@@ -35,4 +35,5 @@ for i, iterations in enumerate(range(start_iterations, end_iterations, step_iter
     plt.yticks([])
 
 plt.tight_layout()
-plt.show()
+plt.savefig("fig")
+# plt.show()

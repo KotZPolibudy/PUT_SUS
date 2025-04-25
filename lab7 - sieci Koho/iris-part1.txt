@@ -1,0 +1,395 @@
+======Weka wyniki======
+
+
+OneR + Ranker
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.OneRAttributeEval -S 1 -F 10 -B 6
+Search:       weka.attributeSelection.Ranker -T -1.7976931348623157E308 -N -1
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Attribute ranking.
+
+Attribute Evaluator (supervised, Class (nominal): 5 class):
+	OneR feature evaluator.
+
+	Using 10 fold cross validation for evaluating attributes.
+	Minimum bucket size for OneR: 6
+
+Ranked attributes:
+95.333  4 petalwidth
+92.667  3 petallength
+72      1 sepallength
+55.333  2 sepalwidth
+
+Selected attributes: 4,3,1,2 : 4
+
+=====================
+InfoGainAttributeEval + Ranker
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.InfoGainAttributeEval 
+Search:       weka.attributeSelection.Ranker -T -1.7976931348623157E308 -N -1
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Attribute ranking.
+
+Attribute Evaluator (supervised, Class (nominal): 5 class):
+	Information Gain Ranking Filter
+
+Ranked attributes:
+ 1.418  3 petallength
+ 1.378  4 petalwidth
+ 0.698  1 sepallength
+ 0.376  2 sepalwidth
+
+Selected attributes: 3,4,1,2 : 4
+================================
+ClassifierSubsetEval + BestFirst
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.ClassifierSubsetEval -B weka.classifiers.rules.ZeroR -T -H "Click to set hold out or test instances" -E DEFAULT
+Search:       weka.attributeSelection.BestFirst -D 1 -N 5
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Best first.
+	Start set: no attributes
+	Search direction: forward
+	Stale search after 5 node expansions
+	Total number of subsets evaluated: 12
+	Merit of best subset found:    0.333
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Classifier Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Hold out/test set: Training data
+	Subset evaluation: classification error
+
+Selected attributes: 
+
+
+=============
+ClassifierSubsetEval + ExhaustiveSearch
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.ClassifierSubsetEval -B weka.classifiers.rules.ZeroR -T -H "Click to set hold out or test instances" -E DEFAULT
+Search:       weka.attributeSelection.ExhaustiveSearch 
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Exhaustive Search.
+	Start set: no attributes
+	Number of evaluations: 16
+	Merit of best subset found:    0.333
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Classifier Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Hold out/test set: Training data
+	Subset evaluation: classification error
+
+Selected attributes: 
+
+===============
+ClassifierSubsetEval + GeneticSearch
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.ClassifierSubsetEval -B weka.classifiers.rules.ZeroR -T -H "Click to set hold out or test instances" -E DEFAULT
+Search:       weka.attributeSelection.GeneticSearch -Z 20 -G 20 -C 0.6 -M 0.033 -R 20 -S 1
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Genetic search.
+	Start set: no attributes
+	Population size: 20
+	Number of generations: 20
+	Probability of crossover:  0.6  
+	Probability of mutation:  0.033
+	Report frequency: 20
+	Random number seed: 1
+
+Initial population
+merit   	scaled  	subset
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 2 3 4 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	1 2 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+
+Generation: 1
+merit   	scaled  	subset
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 3 
+ 0.33333	 0.75   	1 2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	2 4 
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 4 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 2 3 4 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	2 3 
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	4 
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Classifier Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Hold out/test set: Training data
+	Subset evaluation: classification error
+
+Selected attributes: 
+
+===========
+
+WrapperSubsetEval + BestFirst
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.WrapperSubsetEval -B weka.classifiers.rules.ZeroR -F 5 -T 0.01 -R 1 -E DEFAULT --
+Search:       weka.attributeSelection.BestFirst -D 1 -N 5
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Best first.
+	Start set: no attributes
+	Search direction: forward
+	Stale search after 5 node expansions
+	Total number of subsets evaluated: 12
+	Merit of best subset found:    0.333
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Wrapper Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Subset evaluation: classification accuracy
+	Number of folds for accuracy estimation: 5
+
+Selected attributes: 
+
+===============
+WrapperSubsetEval + ExhaustiveSearch
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.WrapperSubsetEval -B weka.classifiers.rules.ZeroR -F 5 -T 0.01 -R 1 -E DEFAULT --
+Search:       weka.attributeSelection.ExhaustiveSearch 
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Exhaustive Search.
+	Start set: no attributes
+	Number of evaluations: 16
+	Merit of best subset found:    0.333
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Wrapper Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Subset evaluation: classification accuracy
+	Number of folds for accuracy estimation: 5
+
+Selected attributes: 
+
+================
+WrapperSubsetEval + GeneticSearch
+
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.WrapperSubsetEval -B weka.classifiers.rules.ZeroR -F 5 -T 0.01 -R 1 -E DEFAULT --
+Search:       weka.attributeSelection.GeneticSearch -Z 20 -G 20 -C 0.6 -M 0.033 -R 20 -S 1
+Relation:     iris
+Instances:    150
+Attributes:   5
+              sepallength
+              sepalwidth
+              petallength
+              petalwidth
+              class
+Evaluation mode:    evaluate on all training data
+
+
+
+=== Attribute Selection on all input data ===
+
+Search Method:
+	Genetic search.
+	Start set: no attributes
+	Population size: 20
+	Number of generations: 20
+	Probability of crossover:  0.6  
+	Probability of mutation:  0.033
+	Report frequency: 20
+	Random number seed: 1
+
+Initial population
+merit   	scaled  	subset
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 2 3 4 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	1 2 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+
+Generation: 1
+merit   	scaled  	subset
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 3 
+ 0.33333	 0.75   	1 2 
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 3 4 
+ 0.33333	 0.75   	2 4 
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	2 
+ 0.33333	 0.75   	2 4 
+ 0.33333	 0.75   	1 4 
+ 0.33333	 0.75   	4 
+ 0.33333	 0.75   	1 2 3 4 
+ 0.33333	 0.75   	1 2 3 
+ 0.33333	 0.75   	2 3 
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	
+ 0.33333	 0.75   	3 
+ 0.33333	 0.75   	1 
+ 0.33333	 0.75   	4 
+
+Attribute Subset Evaluator (supervised, Class (nominal): 5 class):
+	Wrapper Subset Evaluator
+	Learning scheme: weka.classifiers.rules.ZeroR
+	Scheme options: 
+	Subset evaluation: classification accuracy
+	Number of folds for accuracy estimation: 5
+
+Selected attributes: 
+
