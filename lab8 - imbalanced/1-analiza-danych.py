@@ -58,6 +58,9 @@ print("\nLiczba przykładów:", X.shape[0])
 print("Liczba atrybutów:", X.shape[1])
 print("Atrybuty klasy:", 1)
 
+print("\nLiczność klas:")
+print(y.value_counts())
+
 # Statystyki atrybutów
 print("\nStatystyki atrybutów:")
 
