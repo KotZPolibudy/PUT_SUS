@@ -33,7 +33,8 @@ classifiers = {
     'SVC': SVC(class_weight='balanced', probability=True),
     'MLP': MLPClassifier(max_iter=1000),
     'GaussianNB': GaussianNB(),
-    'QDA': QuadraticDiscriminantAnalysis()
+    'QDA': QuadraticDiscriminantAnalysis(),
+    'ZeroRule': DummyClassifier(strategy='most_frequent')
 }
 
 # Skorery
@@ -57,11 +58,6 @@ for name, clf in classifiers.items():
     ])
     scores = cross_validate(pipeline, X, y, cv=cv, scoring=scorers, return_train_score=False)
     results[name] = scores
-
-# Klasyfikator ZeroRule (zawsze przewiduje najczęstszą klasę)
-zero_rule = DummyClassifier(strategy='most_frequent')
-zr_scores = cross_validate(zero_rule, X, y, cv=cv, scoring=scorers)
-results['ZeroRule'] = zr_scores
 
 # Agregacja metryk
 mean_scores = {}
