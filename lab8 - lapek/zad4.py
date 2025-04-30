@@ -29,13 +29,12 @@ classifiers = {
     'DecisionTree': DecisionTreeClassifier(class_weight='balanced'),
     'RandomForest': RandomForestClassifier(class_weight='balanced'),
     'SVC': SVC(class_weight='balanced', probability=True),
-    'MLP': MLPClassifier(max_iter=1000),
+    'MLP': MLPClassifier(max_iter=500),
     'GaussianNB': GaussianNB(),
     'QDA': QuadraticDiscriminantAnalysis(),
     'ZeroRule': DummyClassifier(strategy='most_frequent')
 }
 
-# Skorery
 scorers = {
     'accuracy': make_scorer(accuracy_score),
     'gmean': make_scorer(geometric_mean_score),
@@ -44,6 +43,7 @@ scorers = {
 
 # Walidacja krzyżowa
 cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=21)
+
 
 # Funkcja testująca klasyfikatory
 def evaluate_classifiers(apply_smote):
@@ -58,10 +58,12 @@ def evaluate_classifiers(apply_smote):
         results[name] = scores
     return results
 
+
 # Obliczenia
-results_with_smote = evaluate_classifiers(apply_smote=True)
-print("progress!")
 results_without_smote = evaluate_classifiers(apply_smote=False)
+print("progress!")
+results_with_smote = evaluate_classifiers(apply_smote=True)
+
 
 # Agregacja wyników
 def aggregate_results(results):
@@ -71,7 +73,62 @@ def aggregate_results(results):
         std_scores[name] = {metric: np.std(scores[f'test_{metric}']) for metric in scorers}
     return mean_scores, std_scores
 
+
 mean_with_smote, std_with_smote = aggregate_results(results_with_smote)
 mean_without_smote, std_without_smote = aggregate_results(results_without_smote)
 
 print(mean_with_smote, std_with_smote, mean_without_smote, std_without_smote)
+
+
+# Zapis wyników do pliku txt
+def save_results_to_txt(mean_with, std_with, mean_without, std_without, filename="results.txt"):
+    with open(filename, "w") as f:
+        for clf_name in mean_with:
+            f.write(f"Classifier: {clf_name}\n")
+            for metric in scorers:
+                mw = mean_with[clf_name][metric]
+                sw = std_with[clf_name][metric]
+                mn = mean_without[clf_name][metric]
+                sn = std_without[clf_name][metric]
+                f.write(f"  {metric}:\n")
+                f.write(f"    With SMOTE   : mean={mw:.4f}, std={sw:.4f}\n")
+                f.write(f"    Without SMOTE: mean={mn:.4f}, std={sn:.4f}\n")
+            f.write("\n")
+
+
+save_results_to_txt(mean_with_smote, std_with_smote, mean_without_smote, std_without_smote)
+
+
+# Generowanie i zapisywanie wykresów
+def plot_metric(metric, mean_with, mean_without, filename):
+    labels = list(mean_with.keys())
+    with_values = [mean_with[clf][metric] for clf in labels]
+    without_values = [mean_without[clf][metric] for clf in labels]
+
+    x = np.arange(len(labels))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars1 = ax.bar(x - width / 2, without_values, width, label='Without SMOTE')
+    bars2 = ax.bar(x + width / 2, with_values, width, label='With SMOTE')
+
+    ax.set_ylabel(metric)
+    ax.set_title(f'{metric.upper()} comparison with/without SMOTE')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=45, ha='right')
+    ax.legend()
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+
+
+# Tworzenie wykresów dla każdej metryki
+for metric in scorers:
+    plot_metric(
+        metric,
+        mean_with_smote,
+        mean_without_smote,
+        filename=f"{metric}_comparison.png"
+    )
