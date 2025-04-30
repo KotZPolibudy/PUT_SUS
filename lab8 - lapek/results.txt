@@ -11,25 +11,25 @@ Classifier: KNeighbors
 
 Classifier: DecisionTree
   accuracy:
-    With SMOTE   : mean=0.9813, std=0.0058
-    Without SMOTE: mean=0.9852, std=0.0033
+    With SMOTE   : mean=0.9809, std=0.0045
+    Without SMOTE: mean=0.9851, std=0.0042
   gmean:
-    With SMOTE   : mean=0.8776, std=0.0232
-    Without SMOTE: mean=0.8447, std=0.0496
+    With SMOTE   : mean=0.8791, std=0.0287
+    Without SMOTE: mean=0.8511, std=0.0365
   roc_auc:
-    With SMOTE   : mean=0.8841, std=0.0202
-    Without SMOTE: mean=0.8570, std=0.0407
+    With SMOTE   : mean=0.8854, std=0.0256
+    Without SMOTE: mean=0.8619, std=0.0302
 
 Classifier: RandomForest
   accuracy:
-    With SMOTE   : mean=0.9895, std=0.0025
-    Without SMOTE: mean=0.9899, std=0.0030
+    With SMOTE   : mean=0.9897, std=0.0027
+    Without SMOTE: mean=0.9904, std=0.0034
   gmean:
-    With SMOTE   : mean=0.9432, std=0.0186
-    Without SMOTE: mean=0.8855, std=0.0568
+    With SMOTE   : mean=0.9450, std=0.0211
+    Without SMOTE: mean=0.8893, std=0.0589
   roc_auc:
-    With SMOTE   : mean=0.9446, std=0.0176
-    Without SMOTE: mean=0.8933, std=0.0489
+    With SMOTE   : mean=0.9463, std=0.0197
+    Without SMOTE: mean=0.8968, std=0.0508
 
 Classifier: SVC
   accuracy:
@@ -44,14 +44,14 @@ Classifier: SVC
 
 Classifier: MLP
   accuracy:
-    With SMOTE   : mean=0.9883, std=0.0030
-    Without SMOTE: mean=0.9906, std=0.0029
+    With SMOTE   : mean=0.9881, std=0.0035
+    Without SMOTE: mean=0.9908, std=0.0029
   gmean:
-    With SMOTE   : mean=0.9253, std=0.0273
-    Without SMOTE: mean=0.9136, std=0.0416
+    With SMOTE   : mean=0.9235, std=0.0241
+    Without SMOTE: mean=0.9122, std=0.0362
   roc_auc:
-    With SMOTE   : mean=0.9280, std=0.0248
-    Without SMOTE: mean=0.9178, std=0.0362
+    With SMOTE   : mean=0.9262, std=0.0221
+    Without SMOTE: mean=0.9163, std=0.0320
 
 Classifier: GaussianNB
   accuracy:

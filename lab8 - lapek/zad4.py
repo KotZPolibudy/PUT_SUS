@@ -124,6 +124,42 @@ def plot_metric(metric, mean_with, mean_without, filename):
     plt.close()
 
 
+def plot_combined_results(mean_with, std_with, mean_without, std_without, filename="combined_metrics.png"):
+    metrics = list(scorers.keys())
+    classifiers = list(mean_with.keys())
+    x = np.arange(len(classifiers))
+
+    width = 0.12  # szerokość pojedynczego słupka
+    offsets = {
+        ('accuracy', 'without'): -2 * width,
+        ('accuracy', 'with'): -1 * width,
+        ('gmean', 'without'): 0,
+        ('gmean', 'with'): width,
+        ('roc_auc', 'without'): 2 * width,
+        ('roc_auc', 'with'): 3 * width
+    }
+
+    fig, ax = plt.subplots(figsize=(14, 6))
+
+    for metric in metrics:
+        for mode in ['without', 'with']:
+            means = [mean_with[clf][metric] if mode == 'with' else mean_without[clf][metric] for clf in classifiers]
+            stds = [std_with[clf][metric] if mode == 'with' else std_without[clf][metric] for clf in classifiers]
+            label = f"{metric} ({'SMOTE' if mode == 'with' else 'No SMOTE'})"
+            pos = x + offsets[(metric, mode)]
+            ax.bar(pos, means, width=width, yerr=stds, capsize=4, label=label)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(classifiers, rotation=45, ha='right')
+    ax.set_ylabel("Score")
+    ax.set_title("Porównanie klasyfikatorów (3 metryki, z/bez SMOTE, z odchyleniami)")
+    ax.legend()
+    ax.grid(True, linestyle='--', alpha=0.6)
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+
+
 # Tworzenie wykresów dla każdej metryki
 for metric in scorers:
     plot_metric(
@@ -132,3 +168,5 @@ for metric in scorers:
         mean_without_smote,
         filename=f"{metric}_comparison.png"
     )
+
+plot_combined_results(mean_with_smote, std_with_smote, mean_without_smote, std_without_smote)
