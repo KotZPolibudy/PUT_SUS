@@ -1,0 +1,88 @@
+Classifier: KNeighbors
+  accuracy:
+    With SMOTE   : mean=0.9715, std=0.0047
+    Without SMOTE: mean=0.9915, std=0.0032
+  gmean:
+    With SMOTE   : mean=0.9493, std=0.0219
+    Without SMOTE: mean=0.9088, std=0.0448
+  roc_auc:
+    With SMOTE   : mean=0.9498, std=0.0212
+    Without SMOTE: mean=0.9136, std=0.0402
+
+Classifier: DecisionTree
+  accuracy:
+    With SMOTE   : mean=0.9809, std=0.0045
+    Without SMOTE: mean=0.9851, std=0.0042
+  gmean:
+    With SMOTE   : mean=0.8791, std=0.0287
+    Without SMOTE: mean=0.8511, std=0.0365
+  roc_auc:
+    With SMOTE   : mean=0.8854, std=0.0256
+    Without SMOTE: mean=0.8619, std=0.0302
+
+Classifier: RandomForest
+  accuracy:
+    With SMOTE   : mean=0.9897, std=0.0027
+    Without SMOTE: mean=0.9904, std=0.0034
+  gmean:
+    With SMOTE   : mean=0.9450, std=0.0211
+    Without SMOTE: mean=0.8893, std=0.0589
+  roc_auc:
+    With SMOTE   : mean=0.9463, std=0.0197
+    Without SMOTE: mean=0.8968, std=0.0508
+
+Classifier: SVC
+  accuracy:
+    With SMOTE   : mean=0.9800, std=0.0039
+    Without SMOTE: mean=0.9779, std=0.0044
+  gmean:
+    With SMOTE   : mean=0.9570, std=0.0169
+    Without SMOTE: mean=0.9625, std=0.0153
+  roc_auc:
+    With SMOTE   : mean=0.9574, std=0.0164
+    Without SMOTE: mean=0.9628, std=0.0150
+
+Classifier: MLP
+  accuracy:
+    With SMOTE   : mean=0.9881, std=0.0035
+    Without SMOTE: mean=0.9908, std=0.0029
+  gmean:
+    With SMOTE   : mean=0.9235, std=0.0241
+    Without SMOTE: mean=0.9122, std=0.0362
+  roc_auc:
+    With SMOTE   : mean=0.9262, std=0.0221
+    Without SMOTE: mean=0.9163, std=0.0320
+
+Classifier: GaussianNB
+  accuracy:
+    With SMOTE   : mean=0.9591, std=0.0033
+    Without SMOTE: mean=0.9588, std=0.0044
+  gmean:
+    With SMOTE   : mean=0.9445, std=0.0264
+    Without SMOTE: mean=0.9412, std=0.0235
+  roc_auc:
+    With SMOTE   : mean=0.9450, std=0.0259
+    Without SMOTE: mean=0.9417, std=0.0229
+
+Classifier: QDA
+  accuracy:
+    With SMOTE   : mean=0.9889, std=0.0017
+    Without SMOTE: mean=0.9870, std=0.0014
+  gmean:
+    With SMOTE   : mean=0.9444, std=0.0269
+    Without SMOTE: mean=0.9519, std=0.0243
+  roc_auc:
+    With SMOTE   : mean=0.9459, std=0.0255
+    Without SMOTE: mean=0.9530, std=0.0231
+
+Classifier: ZeroRule
+  accuracy:
+    With SMOTE   : mean=0.0301, std=0.0003
+    Without SMOTE: mean=0.9699, std=0.0003
+  gmean:
+    With SMOTE   : mean=0.0000, std=0.0000
+    Without SMOTE: mean=0.0000, std=0.0000
+  roc_auc:
+    With SMOTE   : mean=0.5000, std=0.0000
+    Without SMOTE: mean=0.5000, std=0.0000
+
