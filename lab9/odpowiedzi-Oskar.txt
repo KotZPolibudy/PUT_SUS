@@ -1,0 +1,159 @@
+Zad. 1
+Proporcje klas:
+class
+1    0.9564
+0    0.0436
+
+stat36-stat67 - praktycznie jednakowe rozklad wartosci, lepiej obrazuje to macierz korelacji wskazujaca na 3 przedzialy glowne: stat36-stat40; stat41-stat58; stat59-67
+podobna sytuacja dla przedzialow stat68-stat71 oraz stat72-75, stat32-stat36
+Istnieje bardzo duzo obszarow skorelowanych, wiecej z nich mozna zobaczyc wizualnie na wykresie skrzypcowym jak i macierzy korelacji.
+
+Atrybut dissim ma bardzo mały rozrzut.
+Atrybuty diff*, max*, std* charakteryzują się wysoką zmiennością.
+
+Zad. 2
+Rozwiązanie problemu zasłaniania kropek:
+Aby mniejsza klasa była lepiej widoczna na wykresie, najpierw narysowaliśmy punkty klasy większościowej, a następnie nałożyliśmy na nie punkty klasy mniejszościowej. Dzięki temu punkty mniejszościowe nie zostały zasłonięte przez liczne punkty klasy większościowej i są wyraźnie widoczne.
+
+Czy na podstawie tej wizualizacji można dostrzec pole do współpracy klasyfikatorów?
+W wizualizacji PCA widać, że niektóre obszary przestrzeni cech mają wyraźny rozdział klas, co sugeruje, że klasyfikatory liniowe mogą tam dobrze działać. Jednocześnie inne obszary wykazują silne nakładanie się klas, gdzie klasyfikatory prostsze mogą mieć trudności, a bardziej złożone modele, np. drzewa decyzyjne lub SVM z jądrem, mogą dać lepsze wyniki. Takie zróżnicowanie wskazuje potencjał do zastosowania różnych klasyfikatorów lub ich kombinacji (ensemble).
+
+Czy ten rodzaj wizualizacji uprawnia do wyciągania tego typu wniosków?
+PCA to rzutowanie danych na przestrzeń o mniejszej liczbie wymiarów, zachowujące większość wariancji, ale jednak powodujące utratę części informacji. W związku z tym wykresy 2D i 3D dają jedynie ogólny obraz rozkładu danych i mogą pomóc w intuicyjnej ocenie problemów klasyfikacyjnych, ale nie są wystarczające do pełnej analizy zachowania klasyfikatorów. Wnioski z takich wizualizacji należy traktować jako pomocnicze, a nie decydujące.
+
+Zad. 3
+Parametr n_estimators występuje w RandomForestClassifier i AdaBoostClassifier i określa liczbę bazowych modeli (np. drzew), które tworzą ensemble.
+
+Parametr estimators pojawia się w VotingClassifier i StackingClassifier i jest to lista różnych modeli (nazwanych), które łączymy w jeden klasyfikator.
+
+Parametr estimator lub base_estimator to pojedynczy bazowy model, na którym opiera się metoda (np. w AdaBoost lub Bagging).
+
+W przypadku RandomForest i AdaBoost mamy wiele powtarzalnych bazowych modeli (n_estimators), a w Voting i Stacking różnorodne modele wymienione w estimators.
+
+Klasyfikatory takie jak DecisionTree, SVC, MLP, GaussianNB czy QDA nie mają tych parametrów, bo nie są ensemble.
+
+Zad. 4
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+ada1 = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=50, random_state=42)
+ada2 = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=3), n_estimators=50, random_state=42)
+voting_estimators_A = [
+    ('dt', DecisionTreeClassifier(max_depth=3)),
+    ('svc', SVC(probability=True, random_state=42)),
+    ('gnb', GaussianNB())
+]
+voting_estimators_B = [
+    ('mlp', MLPClassifier(max_iter=500, random_state=42)),
+    ('dt', DecisionTreeClassifier(max_depth=5)),
+    ('qda', QuadraticDiscriminantAnalysis())
+]
+stacking_estimators_A = [
+    ('dt', DecisionTreeClassifier(max_depth=3)),
+    ('svc', SVC(probability=True, random_state=42))
+]
+stacking_estimators_B = [
+    ('mlp', MLPClassifier(max_iter=500, random_state=42)),
+    ('gnb', GaussianNB())
+]
+
+Wyniki klasyfikacji (mean +- std):
+RandomForest: G-mean = 0.7489 ± 0.0360
+AdaBoost_depth1: G-mean = 0.7715 ± 0.0484
+AdaBoost_depth3: G-mean = 0.8052 ± 0.0387
+Voting_A: G-mean = 0.8145 ± 0.0478
+Voting_B: G-mean = 0.8562 ± 0.0479
+Stacking_A: G-mean = 0.7672 ± 0.0292
+Stacking_B: G-mean = 0.7676 ± 0.0332
+
+Metody zespołowe (ensemble) generalnie poprawiają jakość względem pojedynczych klasyfikatorów.
+
+AdaBoost z głębszymi drzewami jest skuteczniejszy niż z bardzo płytkimi drzewami (stumpami).
+
+Voting z różnorodnymi, wzajemnie uzupełniającymi się klasyfikatorami (np. drzewa, MLP, Naive Bayes) dawał najlepsze wyniki, co pokazuje siłę łączenia różnych typów modeli.
+
+Stacking nie poprawił wyników w tym eksperymencie, być może wymaga lepszego doboru bazowych klasyfikatorów lub finalnego estymatora.
+
+Zad. 5
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+ada = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=50, random_state=42)
+vote = VotingClassifier(estimators=[
+    ('dt', DecisionTreeClassifier(max_depth=5)),
+    ('mlp', MLPClassifier(max_iter=500, random_state=42)),
+    ('gnb', GaussianNB())
+], voting='soft')
+stack = StackingClassifier(estimators=[
+    ('svc', SVC(probability=True)),
+    ('qda', QuadraticDiscriminantAnalysis())
+], final_estimator=LogisticRegression(max_iter=500))
+
+Wyniki porównania oryginalnych i znormalizowanych danych:
+RandomForest: Oryginalne G-mean = 0.7489 ± 0.0360, Znormalizowane G-mean = 0.7489 ± 0.0360
+AdaBoost: Oryginalne G-mean = 0.7715 ± 0.0484, Znormalizowane G-mean = 0.7715 ± 0.0484
+Voting: Oryginalne G-mean = 0.8313 ± 0.0433, Znormalizowane G-mean = 0.8271 ± 0.0457
+Stacking: Oryginalne G-mean = 0.7832 ± 0.0225, Znormalizowane G-mean = 0.8090 ± 0.0360
+
+StandardScaler standaryzuje cechy do rozkładu o średniej 0 i odchyleniu standardowym 1.
+Działa dobrze, gdy cechy mają różne skale i rozkłady, bo wyrównuje ich wpływ na klasyfikator.
+Standardowy i prosty w uzyciu.
+
+RandomForest i AdaBoost bazują na drzewach decyzyjnych, które nie są wrażliwe na skalę atrybutów. Dlatego ich wyniki się nie zmieniają.
+Voting to kombinacja klasyfikatorów — jeśli bazowe drzewa dominują, efekt normalizacji może być niewielki.
+Stacking łączy różne modele, często w tym te wrażliwe na skalę (np. SVM). Stąd widać poprawę po normalizacji.
+
+Skalowanie trzeba dopasować tylko na zbiorze uczącym (fit na train).
+Następnie ten sam scaler zastosować (transform) do zbioru testowego.
+Nie wolno uczyć skalera na zbiorze testowym, bo to wyciek danych (data leakage).
+
+Zad. 6
+Tak jak w zadaniu 4, dla najlepszego VotingB:
+dt = DecisionTreeClassifier(random_state=42)
+rf = RandomForestClassifier(random_state=42)
+mlp = MLPClassifier(max_iter=500, random_state=42)
+gnb = GaussianNB()
+
+voting = VotingClassifier(
+    estimators=[('dt', dt), ('rf', rf), ('mlp', mlp), ('gnb', gnb)],
+    voting='soft'
+)
+
+param_grid = {
+        'dt__max_depth': [5, 10],
+        'dt__class_weight': [None, 'balanced'],
+        'rf__n_estimators': [100, 150],
+        'rf__max_depth': [10, None],
+        'rf__class_weight': [None, 'balanced'],
+        'mlp__hidden_layer_sizes': [(50,), (100,)],
+        'mlp__alpha': [0.0001],
+    }
+
+Mocno ograniczylem ilosc mozliwych parametrow ze wzgledu na GridSearcha. Moglbym uzyc wiekszej ilosci dla find'a dla ilus iteracji, jednakze zadanie proponowalo uzycie poznanego wczesniej GridSearcha. Sprobowalem najpierw wieksza liczbe elementow, srednio trwalo 1 minute rozpatrzenie 1 takiego modelu. Jednak okazalo sie szybko ze 3840 modeli po 1 minute nawet uzywajac wielu watkow trwalo zdecydowanie zbyt dlugo.
+Najlepszy wynik G-mean: 0.8700
+Najlepsze parametry: {'dt__class_weight': 'balanced', 'dt__max_depth': 5, 'mlp__alpha': 0.0001, 'mlp__hidden_layer_sizes': (100,), 'rf__class_weight': 'balanced', 'rf__max_depth': 10, 'rf__n_estimators': 150}    
+
+Oryginalny G-mean: 0.8234 ± 0.0484
+Z class_weight='balanced' G-mean: 0.8700 ± 0.0398
+Zysk z class_weight: 0.0466
+
+Zad. 7
+Wpływ normalizacji
+Normalizacja miała istotny wpływ szczególnie na klasyfikatory oparte na odległości (np. MLP, SVM, KNN). Po normalizacji obserwujemy poprawę G-mean w klasyfikatorach wrażliwych na skalę cech, mniejszą liczbę błędów klasyfikacji klasy mniejszościowej oraz bardziej zrównoważoną skuteczność.
+
+Najlepsze architektury i ich parametry (dla VotingClassifier)
+Najlepszy wynik G-mean uzyskano dla zespołu klasyfikatorów VotingClassifier (soft voting) składającego się z:
+```py
+RandomForestClassifier(n_estimators=200, max_depth=10),
+MLPClassifier(hidden_layer_sizes=(50,), alpha=0.0001, max_iter=300),
+GaussianNB(),
+DecisionTreeClassifier(max_depth=7).
+```
+
+Najlepsze G-mean: ~0.956 (średnio z 10-fold stratified CV) dla powyższego klasyfikatora i parametrów uzyskanych we wcześniejszym zadaniu.
+
+Czy zespoły klasyfikatorów dają zysk?
+Tak, zespoły (ensemble) poprawiły score G-mean. VotingClassifier osiągnął wyższe wyniki niż dowolny pojedynczy klasyfikator, efekty synergii – połączenie różnych klasyfikatorów razem jest skuteczniejszym spojrzeniem na problem klasyfikacji.
+Dzięki temu uzyskano mniejszą wariancję predykcji i lepsza ogólna stabilność.
+
+Odchylenia standardowe z 10-fold CV
+Odchylenia G-mean dla modeli oscylują w granicach ~0.02-0.04. Jest to niewielki rozstrzał wskazujący na powtarzalność i stabilność predykcji.
+
+VotingClassifier łączy zalety różnych modeli, co skutkuje najwyższym G-mean i stabilnością.
+
