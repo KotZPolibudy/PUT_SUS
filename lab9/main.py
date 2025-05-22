@@ -422,7 +422,7 @@ def plot_avg_confusion_matrix(df):
     
 
 if __name__ == "__main__":
-    data_path = "151863-ensembles.txt"
+    data_path = "151879-ensembles.txt"
     df = read_data(data_path)
     # zadanie 1
     # data_analysis(df)
@@ -435,9 +435,9 @@ if __name__ == "__main__":
     # results = evaluate_ensemble_methods(df)
     # print_results_zad4(results)
     # zadanie 5
-    # print(f"\nPorównanie wyników oryginalnych i znormalizowanych danych:")
-    # original_results, scaled_results = compare_original_vs_scaled(df)
-    # print_results_zad5(original_results, scaled_results)
+    print(f"\nPorównanie wyników oryginalnych i znormalizowanych danych:")
+    original_results, scaled_results = compare_original_vs_scaled(df)
+    print_results_zad5(original_results, scaled_results)
     # zadanie 6
     # print(f"\nTuning VotingClassifier:")
     # best_score, best_params = tune_voting_classifier(df)
@@ -448,6 +448,7 @@ if __name__ == "__main__":
     # print(f"Z class_weight='balanced' G-mean: {mean_bal:.4f} ± {std_bal:.4f}")
     # print(f"Zysk z class_weight: {mean_bal - mean_orig:.4f}")
     # zadanie 7
+    """
     print(f"\nŚrednia macierz pomyłek:")
     all_cm, mean_cm, std_cm = plot_avg_confusion_matrix(df)
     print("Średnia macierz pomyłek:", np.round(mean_cm, 2))
@@ -462,5 +463,6 @@ if __name__ == "__main__":
     acc_mean = np.mean(accuracies)
     acc_std = np.std(accuracies)
     print(f"Accuracy: {acc_mean:.4f} ± {acc_std:.4f}")
+    """
 
 

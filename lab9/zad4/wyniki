@@ -1,0 +1,8 @@
+Wyniki klasyfikacji:
+RandomForest: G-mean = 0.6479 ± 0.0383
+AdaBoost_depth1: G-mean = 0.6844 ± 0.0459
+AdaBoost_depth3: G-mean = 0.7673 ± 0.0397
+Voting_A: G-mean = 0.6959 ± 0.0480
+Voting_B: G-mean = 0.7540 ± 0.0391
+Stacking_A: G-mean = 0.3828 ± 0.1951
+Stacking_B: G-mean = 0.4817 ± 0.0687
