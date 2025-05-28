@@ -1,0 +1,10 @@
+Voting:
+Oryginalny G-mean: 0.7174 ± 0.0484
+Z class_weight='balanced' G-mean: 0.8108 ± 0.0448
+Zysk z class_weight: 0.0935
+
+AdaBoost:
+Oryginalny G-mean: 0.7981 ± 0.0201
+Z class_weight='balanced' G-mean: 0.8412 ± 0.0392
+Zysk z class_weight: 0.0431
+

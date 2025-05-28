@@ -1,3 +1,75 @@
+
+def evaluate_ensemble_methods(df):
+    X, y = prepare_X_y(df)
+
+    # Przygotowanie CV
+    cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+
+    def evaluate_model(model):
+        scores = []
+        for train_idx, test_idx in cv.split(X, y):
+            model.fit(X[train_idx], y[train_idx])
+            y_pred = model.predict(X[test_idx])
+            score = geometric_mean_score(y[test_idx], y_pred)
+            scores.append(score)
+        return np.mean(scores), np.std(scores)
+
+    results = {}
+
+    # 1. RandomForestClassifier
+    print(f"\nRandomForestClassifier:")
+    rf = RandomForestClassifier(n_estimators=100, random_state=42)
+    print(f"Model: {rf}")
+    results['RandomForest'] = evaluate_model(rf)
+
+    # 2. AdaBoost z dwoma bazowymi klasyfikatorami
+    print(f"\nAdaBoost z dwoma bazowymi klasyfikatorami:")
+    ada1 = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=50, random_state=42)
+    ada2 = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=3), n_estimators=50, random_state=42)
+    print(f"Klasyfikator 1: {ada1.estimator}")
+    print(f"Klasyfikator 2: {ada2.estimator}")
+    results['AdaBoost_depth1'] = evaluate_model(ada1)
+    results['AdaBoost_depth3'] = evaluate_model(ada2)
+
+    # 3. VotingClassifier z dwoma zestawami bazowych klasyfikatorów
+    print(f"\nVotingClassifier z dwoma zestawami bazowych klasyfikatorów:")
+    voting_estimators_A = [
+        ('dt', DecisionTreeClassifier(max_depth=3)),
+        ('svc', SVC(probability=True, random_state=42)),
+        ('gnb', GaussianNB())
+    ]
+    voting_estimators_B = [
+        ('mlp', MLPClassifier(max_iter=500, random_state=42)),
+        ('dt', DecisionTreeClassifier(max_depth=5)),
+        ('qda', QuadraticDiscriminantAnalysis())
+    ]
+    print(f"Zestaw A: {voting_estimators_A}")
+    print(f"Zestaw B: {voting_estimators_B}")
+    voting_A = VotingClassifier(estimators=voting_estimators_A, voting='soft')
+    voting_B = VotingClassifier(estimators=voting_estimators_B, voting='soft')
+    results['Voting_A'] = evaluate_model(voting_A)
+    results['Voting_B'] = evaluate_model(voting_B)
+
+    # 4. StackingClassifier z dwoma zestawami bazowych klasyfikatorów i różnymi finalnymi klasyfikatorami
+    print(f"\nStackingClassifier z dwoma zestawami bazowych klasyfikatorów:")
+    stacking_estimators_A = [
+        ('dt', DecisionTreeClassifier(max_depth=3)),
+        ('svc', SVC(probability=True, random_state=42))
+    ]
+    stacking_estimators_B = [
+        ('mlp', MLPClassifier(max_iter=500, random_state=42)),
+        ('gnb', GaussianNB())
+    ]
+    print(f"Zestaw A: {stacking_estimators_A}")
+    print(f"Zestaw B: {stacking_estimators_B}")
+    stacking_A = StackingClassifier(estimators=stacking_estimators_A, final_estimator=LogisticRegression(), cv=5, n_jobs=-1)
+    stacking_B = StackingClassifier(estimators=stacking_estimators_B, final_estimator=RandomForestClassifier(n_estimators=50, random_state=42), cv=5, n_jobs=-1)
+    results['Stacking_A'] = evaluate_model(stacking_A)
+    results['Stacking_B'] = evaluate_model(stacking_B)
+
+    return results
+
+
 Wyniki klasyfikacji:
 RandomForest: G-mean = 0.6479 ± 0.0383
 AdaBoost_depth1: G-mean = 0.6844 ± 0.0459

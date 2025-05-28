@@ -340,6 +340,39 @@ def tune_voting_classifier(df):
 
     return grid.best_score_, grid.best_params_
 
+def tune_adaboost_classifier(df):
+    X, y = prepare_X_y(df)
+    skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+    gmean_scorer = make_scorer(geometric_mean_score)
+
+    # Podstawowy klasyfikator bazowy dla AdaBoost (tu: drzewo decyzyjne)
+    base_estimator = DecisionTreeClassifier(random_state=42)
+
+    adaboost = AdaBoostClassifier(estimator=base_estimator, random_state=42)
+
+    # Zakres hiperparametrów do przeszukania
+    param_grid = {
+        'estimator__max_depth': [1, 2, 3, 4],
+        'n_estimators': [50, 100, 150],
+        'learning_rate': [0.5, 1.0, 1.5]
+    }
+
+    grid = GridSearchCV(
+        estimator=adaboost,
+        param_grid=param_grid,
+        scoring=gmean_scorer,
+        cv=skf,
+        n_jobs=-1,
+        verbose=2
+    )
+
+    grid.fit(X, y)
+
+    print("Najlepszy wynik G-mean:", grid.best_score_)
+    print("Najlepsze parametry:", grid.best_params_)
+
+    return grid.best_score_, grid.best_params_
+
 def evaluate_class_weight_effect(df, best_params):
     X, y = prepare_X_y(df)
     skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
@@ -381,6 +414,33 @@ def evaluate_class_weight_effect(df, best_params):
     )
 
     scores_bal = cross_val_score(voting_bal, X, y, cv=skf, scoring=gmean_scorer, n_jobs=-1)
+    mean_bal = scores_bal.mean()
+    std_bal = scores_bal.std()
+
+    return (mean_orig, std_orig), (mean_bal, std_bal)
+
+def evaluate_class_weight_effect_for_ada(df, best_params):
+    X, y = prepare_X_y(df)
+    skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+    gmean_scorer = make_scorer(geometric_mean_score)
+
+    # Wyodrębniamy parametry drzewa bazowego i AdaBoosta
+    tree_params = {k.replace('estimator__', ''): v for k, v in best_params.items() if k.startswith('estimator__')}
+    ada_params = {k: v for k, v in best_params.items() if not k.startswith('estimator__')}
+
+    # Tworzymy podstawowe drzewo bez class_weight
+    base_tree = DecisionTreeClassifier(random_state=42, **tree_params)
+    ada_orig = AdaBoostClassifier(estimator=base_tree, random_state=42, **ada_params)
+
+    scores_orig = cross_val_score(ada_orig, X, y, cv=skf, scoring=gmean_scorer, n_jobs=-1)
+    mean_orig = scores_orig.mean()
+    std_orig = scores_orig.std()
+
+    # Drzewo z class_weight='balanced'
+    tree_bal = DecisionTreeClassifier(random_state=42, class_weight='balanced', **tree_params)
+    ada_bal = AdaBoostClassifier(estimator=tree_bal, random_state=42, **ada_params)
+
+    scores_bal = cross_val_score(ada_bal, X, y, cv=skf, scoring=gmean_scorer, n_jobs=-1)
     mean_bal = scores_bal.mean()
     std_bal = scores_bal.std()
 
@@ -439,14 +499,24 @@ if __name__ == "__main__":
     # original_results, scaled_results = compare_original_vs_scaled(df)
     # print_results_zad5(original_results, scaled_results)
     # zadanie 6
-    print(f"\nTuning VotingClassifier:")
-    best_score, best_params = tune_voting_classifier(df)
-    print(f"Najlepszy wynik G-mean: {best_score:.4f}")
-    print(f"Najlepsze parametry: {best_params}")
-    (mean_orig, std_orig), (mean_bal, std_bal) = evaluate_class_weight_effect(df, best_params)
-    print(f"\nOryginalny G-mean: {mean_orig:.4f} ± {std_orig:.4f}")
-    print(f"Z class_weight='balanced' G-mean: {mean_bal:.4f} ± {std_bal:.4f}")
-    print(f"Zysk z class_weight: {mean_bal - mean_orig:.4f}")
+    # print(f"\nTuning VotingClassifier:")
+    # best_score, best_params = tune_voting_classifier(df)
+    # print(f"Najlepszy wynik G-mean: {best_score:.4f}")
+    # print(f"Najlepsze parametry: {best_params}")
+    # (mean_orig, std_orig), (mean_bal, std_bal) = evaluate_class_weight_effect(df, best_params)
+    # print(f"\nOryginalny G-mean: {mean_orig:.4f} ± {std_orig:.4f}")
+    # print(f"Z class_weight='balanced' G-mean: {mean_bal:.4f} ± {std_bal:.4f}")
+    # print(f"Zysk z class_weight: {mean_bal - mean_orig:.4f}")
+
+    # print(f"\nTuning AdaBoost:")
+    # best_score, best_params = tune_adaboost_classifier(df)
+    # print(f"Najlepszy wynik G-mean: {best_score:.4f}")
+    # print(f"Najlepsze parametry: {best_params}")
+    # (mean_orig, std_orig), (mean_bal, std_bal) = evaluate_class_weight_effect_for_ada(df, best_params)
+    # print(f"\nOryginalny G-mean: {mean_orig:.4f} ± {std_orig:.4f}")
+    # print(f"Z class_weight='balanced' G-mean: {mean_bal:.4f} ± {std_bal:.4f}")
+    # rint(f"Zysk z class_weight: {mean_bal - mean_orig:.4f}")
+
     # zadanie 7
     """
     print(f"\nŚrednia macierz pomyłek:")
@@ -464,5 +534,41 @@ if __name__ == "__main__":
     acc_std = np.std(accuracies)
     print(f"Accuracy: {acc_mean:.4f} ± {acc_std:.4f}")
     """
+
+    all_cm, mean_cm, std_cm = plot_avg_confusion_matrix(df)
+    print("Średnia macierz pomyłek:", np.round(mean_cm, 2))
+    print("Odchylenie standardowe:", np.round(std_cm, 2))
+
+    accuracies = []
+    gmeans = []
+
+    # Zakładamy, że y_true i y_pred z każdego folda są dostępne lub można je uzyskać
+    # Jeśli nie, to trzeba je zebrać w funkcji `plot_avg_confusion_matrix` i zwrócić dodatkowo
+
+    for cm in all_cm:
+        correct = np.trace(cm)
+        total = np.sum(cm)
+        acc = correct / total
+        accuracies.append(acc)
+
+        # Obliczenie G-mean z macierzy pomyłek
+        # Zakładamy binary classification: [TN, FP], [FN, TP]
+        if cm.shape == (2, 2):
+            tn, fp, fn, tp = cm.ravel()
+            sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0
+            specificity = tn / (tn + fp) if (tn + fp) > 0 else 0
+            gmean = (sensitivity * specificity) ** 0.5
+            gmeans.append(gmean)
+        else:
+            gmeans.append(np.nan)  # lub można pominąć dla nie-binarnych
+
+    acc_mean = np.mean(accuracies)
+    acc_std = np.std(accuracies)
+    gmean_mean = np.nanmean(gmeans)
+    gmean_std = np.nanstd(gmeans)
+
+    print(f"Accuracy: {acc_mean:.4f} ± {acc_std:.4f}")
+    print(f"G-mean:   {gmean_mean:.4f} ± {gmean_std:.4f}")
+
 
 

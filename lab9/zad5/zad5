@@ -1,4 +1,4 @@
-📊 Wyniki porównania oryginalnych i znormalizowanych danych:
+Wyniki porównania oryginalnych i znormalizowanych danych:
 RandomForest: Oryginalne G-mean = 0.6479 ± 0.0383, Znormalizowane G-mean = 0.6479 ± 0.0383
 AdaBoost: Oryginalne G-mean = 0.6844 ± 0.0459, Znormalizowane G-mean = 0.6844 ± 0.0459
 Voting: Oryginalne G-mean = 0.7282 ± 0.0431, Znormalizowane G-mean = 0.7192 ± 0.0451
