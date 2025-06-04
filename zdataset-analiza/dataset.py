@@ -48,18 +48,18 @@ def data_analysis(df):
 
 
 if __name__ == "__main__":
-    # Download latest version
-    # data_path = kagglehub.dataset_download("anandshaw2001/video-game-sales")
-    # print("Path to dataset files:", data_path)
     # read data
     data_path = "vgsales.csv"
     dataframe = pd.read_csv(data_path)
     data_analysis(dataframe)
+    # todo
+    # Genre - publisher correlations
     # plot sales each year
     # plot sales for each publisher
     # plot sales each platform
     # plot sales each Genre
-    # plot sales each platfor/year (2D)
+    # plot sales each platform/year (2D)
     # plot same stuff but / year
-    # Genre - publisher correlations
+    # calc/plot avg sales per game published
+    # Group by? Gra wydana na kilka platform ma rekord dla każdej z nich
     # Model przewidujący sprzedaż danego combo Publisher/Platform/Genre ale w następnym roku?
