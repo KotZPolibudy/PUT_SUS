@@ -1,0 +1,71 @@
+%! Author = Wojciech Kot - 151879
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{graphicx} % daj an 1in jak chcesz normalniejszy margines, ale kod mi się w linii nie mieści :P
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{subfigure}
+
+\title{Zadanie 5. Hybrydowy Algorytm Ewolucyjny}
+\author{Wojciech Kot 151879}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Opis zbioru danych}\label{sec:opis-zbioru-danych}
+
+Zbiór danych, który zdecydowałem się przebadać to zbiór dostępny pod linkiem:
+\href{https://www.kaggle.com/datasets/anandshaw2001/video-game-sales}{video-game-sales}.
+Pochodzi on z serwisu kaggle i zawiera on informacje dotyczące sprzedaży gier wideo na różnych platformach sprzętowych,
+w różnych regionach świata i w rozmaitych gatunkach gier.
+Dane te mogą być wykorzystane zarówno do analizy trendów rynkowych,
+jak i do przewidywania sprzedaży w zależności od cech gry, w tym takich jak jej wydawca, platforma, czy rok wydania.
+
+Zbiór danych składa się z \textbf{11 kolumn} i \textbf{16\,598 rekordów}.
+Każdy rekord odpowiada jednej grze wideo na konkretnej platformie — oznacza to,
+że jeśli dana gra została wydana na kilku platformach (np.\ PC i PS4),
+to pojawia się w zbiorze danych wielokrotnie, jako osobne wpisy dla każdej z tych platform.
+
+Każdy rekord zawiera następujące atrybuty:
+\begin{itemize}
+  \item \textbf{Rank} – pozycja gry w globalnym rankingu sprzedaży,
+  \item \textbf{Name} – tytuł gry,
+  \item \textbf{Platform} – platforma, na której gra została wydana (np. PC, PS4),
+  \item \textbf{Year} – rok wydania gry,
+  \item \textbf{Genre} – gatunek gry (np. Action, Sports),
+  \item \textbf{Publisher} – wydawca gry,
+  \item \textbf{NA\_Sales} – sprzedaż w Ameryce Północnej (w milionach egzemplarzy),
+  \item \textbf{EU\_Sales} – sprzedaż w Europie (w milionach egzemplarzy),
+  \item \textbf{JP\_Sales} – sprzedaż w Japonii (w milionach egzemplarzy),
+  \item \textbf{Other\_Sales} – sprzedaż w pozostałych regionach świata (w milionach egzemplarzy),
+  \item \textbf{Global\_Sales} – łączna sprzedaż na całym świecie (w milionach egzemplarzy).
+\end{itemize}
+
+Zbiór zawiera również brakujące wartości.
+\textbf{Publisher} ma 58 brakujących wartości, oraz
+\textbf{Year} ma 271 brakujących wartości.
+
+\section{Eksploracja danych}\label{sec:eksploracja-danych}
+
+\subsection{Najczęściej występujące rekordy}\label{subsec:najczesciej-wystepujace-rekordy}
+
+
+\section{Wyniki predykcji modeli}\label{sec:wyniki-predykcji-modeli}
+
+
+\section{Link do repozytorium}\label{sec:link-do-repo}
+Kod źródłowy w repozytorium GitHub dostępny pod linkiem: \\
+\href{https://github.com/KotZPolibudy/PUT_SUS/zdataset-analiza}{Repozytorium}.
+
+\end{document}
