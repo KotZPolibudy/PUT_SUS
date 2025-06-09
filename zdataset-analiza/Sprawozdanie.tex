@@ -12,9 +12,9 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{cleveref}
-\usepackage{subfigure}
+% \usepackage{subfigure}
 
-\title{Zadanie 5. Hybrydowy Algorytm Ewolucyjny}
+\title{Raport ze studium przypadku}
 \author{Wojciech Kot 151879}
 \date{}
 
@@ -23,7 +23,7 @@
 \maketitle
 \newpage
 
-\section{Opis zbioru danych}\label{sec:opis-zbioru-danych}
+\section{Wstęp}\label{sec:wstep}
 
 Zbiór danych, który zdecydowałem się przebadać to zbiór dostępny pod linkiem:
 \href{https://www.kaggle.com/datasets/anandshaw2001/video-game-sales}{video-game-sales}.
@@ -31,6 +31,10 @@ Pochodzi on z serwisu kaggle i zawiera on informacje dotyczące sprzedaży gier 
 w różnych regionach świata i w rozmaitych gatunkach gier.
 Dane te mogą być wykorzystane zarówno do analizy trendów rynkowych,
 jak i do przewidywania sprzedaży w zależności od cech gry, w tym takich jak jej wydawca, platforma, czy rok wydania.
+Sam jestem ciekawy powiązań jakie (możliwe, że) uda się odkryć,
+chociażby korelacji wydawcy ze sprzedażą i pewnych różnic pomiędzy wydawcami a sprzedażą w konkretnych rejonach świata.
+
+\section{Opis zbioru danych}\label{sec:opis-zbioru-danych}
 
 Zbiór danych składa się z \textbf{11 kolumn} i \textbf{16\,598 rekordów}.
 Każdy rekord odpowiada jednej grze wideo na konkretnej platformie — oznacza to,
@@ -52,13 +56,62 @@ Każdy rekord zawiera następujące atrybuty:
   \item \textbf{Global\_Sales} – łączna sprzedaż na całym świecie (w milionach egzemplarzy).
 \end{itemize}
 
-Zbiór zawiera również brakujące wartości.
-\textbf{Publisher} ma 58 brakujących wartości, oraz
+Zbiór zawiera również brakujące wartości. \\
+\textbf{Publisher} ma 58 brakujących wartości, oraz \\
 \textbf{Year} ma 271 brakujących wartości.
 
 \section{Eksploracja danych}\label{sec:eksploracja-danych}
 
-\subsection{Najczęściej występujące rekordy}\label{subsec:najczesciej-wystepujace-rekordy}
+\subsection{Histogramy zmiennych ilościowych}\label{subsec:histogramy-zmiennych-ilosciowych}
+
+Dla wszystkich zmiennych ilościowych (w tym sprzedaży regionalnej i globalnej) wygenerowałem histogramy.
+Analiza wykazała silne skośności w rozkładach -- zdecydowana większość gier osiąga bardzo niską sprzedaż (poniżej 0.5 miliona egzemplarzy),
+natomiast tylko nieliczne tytuły mają sprzedaż przekraczającą 5 milionów.
+Sugeruje to obecność efektu długiego ogona typowego dla rynku gier, jak i dla ogółu rynków produktów rozrywkowych.
+
+\vspace{0.3cm}
+\noindent
+\textit{(TODO: W tym miejscu można umieścić ilustrację z histogramami)}
+\vspace{0.3cm}
+
+\subsection{Analiza korelacji}\label{subsec:analiza-korelacji}
+
+Obliczyłem macierz korelacji pomiędzy zmiennymi ilościowymi i przedstawiam ją graficznie jako heatmapę.
+Najsilniejsze korelacje zaobserwowano między regionalnymi sprzedażami a \texttt{Global\_Sales},
+co jest zgodne z intuicją – wartości te są składnikami łącznej sprzedaży.
+W szczególności:
+\begin{itemize}
+  \item \texttt{NA\_Sales} i \texttt{Global\_Sales}: wysoka dodatnia korelacja,
+  \item \texttt{EU\_Sales} i \texttt{Global\_Sales}: wysoka dodatnia korelacja,
+  \item \texttt{JP\_Sales} – znacznie niższa stosunkowo korelacja z resztą regionów, co może wskazywać na odrębność rynku japońskiego.
+\end{itemize}
+
+Po obliczeniu korelacji, należy zwrócić uwagę na rynek japoński.
+Wygląda na to, że nie podąża on do końca za światowym trendem,
+a niska korelacja sugeruje, że mogą panować na nim zupełnie inne trendy.
+
+\vspace{0.3cm}
+\noindent
+\textit{(TODO: W tym miejscu można wstawić wykres z macierzą korelacji – heatmapę)}
+\vspace{0.3cm}
+
+\subsection{Sprzedaż w czasie}\label{subsec:sprzedaz-w-czasie}
+
+Zbadałem również rozkład sprzedaży gier w kolejnych latach.
+Dane pokazują wzrost liczby wydawanych gier oraz ich sprzedaży począwszy od lat 90.,
+z wyraźnym szczytem w okolicach roku 2008, po którym obserwowany jest stopniowy spadek.
+Spadek ten może wynikać zarówno z faktycznego zmniejszenia liczby wydań, jak i niepełności danych w późniejszych latach.
+Z własnej wiedzy jestem w stanie stwierdzić, że głównym powodem tego spadku będą brakujące dane,
+szczególnie braki w latach 2020 i późniejszych, kiedy rynek gier miał swego rodzaju ``złotą erę''.
+
+\vspace{0.3cm}
+\noindent
+\textit{(TODO: W tym miejscu można wstawić wykres liniowy przedstawiający sumę sprzedaży lub liczbę gier na rok)}
+\vspace{0.3cm}
+
+\subsection{TODO}\label{subsec:todo}
+No uzupełnić dalej :)
+
 
 
 \section{Wyniki predykcji modeli}\label{sec:wyniki-predykcji-modeli}
