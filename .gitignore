@@ -172,3 +172,7 @@ cython_debug/
 
 #PyCharm things
 .idea
+/out/Sprawozdanie.synctex.gz
+/auxil/Sprawozdanie.out
+/auxil/Sprawozdanie.aux
+/out/Sprawozdanie.pdf
