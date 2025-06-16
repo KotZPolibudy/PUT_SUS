@@ -69,10 +69,12 @@ Analiza wykazała silne skośności w rozkładach -- zdecydowana większość gi
 natomiast tylko nieliczne tytuły mają sprzedaż przekraczającą 5 milionów.
 Sugeruje to obecność efektu długiego ogona typowego dla rynku gier, jak i dla ogółu rynków produktów rozrywkowych.
 
-\vspace{0.3cm}
-\noindent
-\textit{(TODO: W tym miejscu można umieścić ilustrację z histogramami)}
-\vspace{0.3cm}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/histogramy}
+    \caption{}
+    \label{fig:histogramy}
+\end{figure}
 
 \subsection{Analiza korelacji}\label{subsec:analiza-korelacji}
 
@@ -90,10 +92,12 @@ Po obliczeniu korelacji, należy zwrócić uwagę na rynek japoński.
 Wygląda na to, że nie podąża on do końca za światowym trendem,
 a niska korelacja sugeruje, że mogą panować na nim zupełnie inne trendy.
 
-\vspace{0.3cm}
-\noindent
-\textit{(TODO: W tym miejscu można wstawić wykres z macierzą korelacji – heatmapę)}
-\vspace{0.3cm}
+\begin{figure}[H]
+    \centering
+    \includegraphics{figures/korelacje}
+    \caption{Korelacja pomiędzy atrybutami liczbowymi}
+    \label{fig:korelacje}
+\end{figure}
 
 \subsection{Sprzedaż w czasie}\label{subsec:sprzedaz-w-czasie}
 
@@ -103,14 +107,129 @@ z wyraźnym szczytem w okolicach roku 2008, po którym obserwowany jest stopniow
 Spadek ten może wynikać zarówno z faktycznego zmniejszenia liczby wydań, jak i niepełności danych w późniejszych latach.
 Z własnej wiedzy jestem w stanie stwierdzić, że głównym powodem tego spadku będą brakujące dane,
 szczególnie braki w latach 2020 i późniejszych, kiedy rynek gier miał swego rodzaju ``złotą erę''.
+Niestety, nie udało mi się znaleźć podobnie holistycznych danych co do sprzedaży gier po 2015 roku.
+Mimo to, bazując na licznych medialnych doniesieniach z branży gier wideo z kolejnych lat wnioskuję że wynikiem widocznego spadku są brakujące dane względem rzeczywistości.
 
-\vspace{0.3cm}
-\noindent
-\textit{(TODO: W tym miejscu można wstawić wykres liniowy przedstawiający sumę sprzedaży lub liczbę gier na rok)}
-\vspace{0.3cm}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Lata-sprzedaz}
+        \caption{Sprzedaż w mln \$ w kolejnych latach}
+        \label{fig:sprzedaz}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Lata-ilosc}
+        \caption{Ilośc gier sprzedanych w kolejnych latach}
+        \label{fig:sprzedaz2}
+    \end{minipage}
+\end{figure}
 
-\subsection{TODO}\label{subsec:todo}
-No uzupełnić dalej :)
+
+\subsection{Badanie wydawców}\label{subsec:badanie-wydawcow}
+
+Badając zbiór danych przeanalizowałem też pewne własności konkretnych wydawców.
+Przede wszystkim, zdecydowałem się zbadać jakie są najpopularniejsze gatunki dla danych wydawców, czyli czy istnieje pewna korelacja, a jeśli tak, to jaka, pomiędzy wydawcą a gatunkiem.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/Genre-Publisher}
+    \caption{Liczba unikanlych gier z danego gatunku, dla danych wydawców}
+    \label{fig:wydawcy0}
+\end{figure}
+
+Dodatkowo, chciałem zobaczyć czy występują różnice pomiędzy ilością wydawanych gier, a zyskiem z ich sprzedaży, stąd 3 zestawienia na wykresach~\ref{fig:wydawcy_all}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/wydawcy-sprzedaz}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/wydawcy-ilosc}
+    \end{minipage}
+
+    \vspace{0.5em}
+
+    \begin{minipage}[t]{0.6\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/wydawcy-srednia-sprzedaz}
+    \end{minipage}
+
+    \caption{Top 20 wydawców według globalnej sprzedaży (góra lewa), liczby wydanych gier (góra prawa) oraz średniej sprzedaży (dół)}
+    \label{fig:wydawcy_all}
+\end{figure}
+
+Same te zestawienia prowokują myśli o tym, w jaki sposób powinno się kategoryzować wydawców, czy faworyzować ``dużych graczy''
+przez największe zarobki (wynikające często z tego, jak dużo gier wydają), czy może skorzystać ze średniej sprzedaży,
+potencjalnie faworyzując wydawców jednego lub dwóch hitów, ale nie znanych szerszej publiczności poza danymi tytułami.
+
+\subsection{Badanie gatunków}\label{subsec:badanie-gatunkow}
+Badając dalej zbiór danych zdecydowałem się przyjrzeć bliżej gatunkom gier występującym w datasecie.
+Istnieje tutaj gatunek ``Mist'' oznaczający tyle co gatunek ``Inny''.
+Jest on o tyle ciekawym przypadkiem, że pomimo bycia trzecim najczęstszym gatunkiem, nie odzwierciedla tego wcale sprzedaż globalna dla tego gatunku, jak widać na~\ref{fig:gat} oraz na~\ref{fig:gat2}.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/gatunek-sprzedaz}
+        \caption{Sprzedaż w mln \$ dla danych gatunków}
+        \label{fig:gat}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/gatunek-ilosc}
+        \caption{Ilośc gier sprzedanych dla danych gatunków}
+        \label{fig:gat2}
+    \end{minipage}
+\end{figure}
+
+
+\subsection{Badanie platform}\label{subsec:badanie-platform}
+Najciekawsze z wniosków przyniosło mi badanie zależności między platformami.
+Początkowo, wykonałem podobne zestawienia jak powyżej:
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/platforma-sprzedaz}
+        \caption{Sprzedaż w mln \$ na danej platformie}
+        \label{fig:platform}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/platforma-ilosc}
+        \caption{Ilośc gier sprzedanych na danej platformie}
+        \label{fig:platform2}
+    \end{minipage}
+\end{figure}
+
+Jednak to nie koniec, bo znacznie więcej informacji można wyciągnąć z zestawienia sprzedaży (czy to ilości gier, czy \$) dla platform w danym roku, za pomocą heatmapy.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{figures/rokplatforma-sprzedaz}
+    \caption{Sprzedaż według platformy i roku}
+    \label{fig:platform-year-sales}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{figures/rokplatforma-ilosc}
+    \caption{Ilośc gier według platformy i roku}
+    \label{fig:platform-year-count}
+\end{figure}
+
+Przede wszystkim nasuwają się oczywiste wnioski, że żadna z badanych platform nie ma długiego życia.
+Co roku właściwie pojawiały się na rynku nowe platformy, podbierając część klientów od ``głównych graczy''.
 
 
 
