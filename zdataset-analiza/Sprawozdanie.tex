@@ -185,7 +185,7 @@ Jest on o tyle ciekawym przypadkiem, że pomimo bycia trzecim najczęstszym gatu
     \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/gatunek-ilosc}
-        \caption{Ilość gier wydanych dla danych gatunków}
+        \caption{Liczba gier wydanych dla danych gatunków}
         \label{fig:gat2}
     \end{minipage}
 \end{figure}
@@ -207,7 +207,7 @@ Początkowo, wykonałem podobne zestawienia jak powyżej:
     \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/platforma-ilosc}
-        \caption{Ilość gier wydanych na danej platformie}
+        \caption{Liczba gier wydanych na danej platformie}
         \label{fig:platform2}
     \end{minipage}
 \end{figure}
@@ -224,7 +224,7 @@ Jednak to nie koniec, bo znacznie więcej informacji można wyciągnąć z zesta
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/rokplatforma-ilosc}
-    \caption{Ilość gier wydanych według platformy i roku}
+    \caption{Liczba gier wydanych według platformy i roku}
     \label{fig:platform-year-count}
 \end{figure}
 
@@ -336,7 +336,7 @@ Drzewo regresji  & 0.200 & 0.909 & 0.811 & 125.08\% \\
 XGBoost          & 0.145 & 1.113 & 0.717 & 59.42\% \\
 \hline
 \end{tabular}
-\caption{Porównanie skuteczności modeli regresyjnych (na danych z USA i Japonii)}
+\caption{Porównanie skuteczności modeli regresyjnych (na danych z Ameryki i Japonii)}
 \label{tab:model_comparison3}
 \end{table}
 
@@ -354,9 +354,56 @@ XGBoost          & 0.145 & 1.113 & 0.717 & 59.42\% \\
     \label{fig:xgb_importance-last}
 \end{figure}
 
+Te wyniki zupełnie nie szokują, ze względu na silną korelację między sprzedażą w Ameryce północnej, a globalną.
+Szczególnie jeśli wziąć pod uwagę tę wizualizację regresji liniowej:
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/reglin-last}
+        \caption{Wizualizacja modelu regresji liniowej}
+        \label{fig:reg-model}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/reglin-solo}
+        \caption{Regresja liniowa dla sprzedaży w Ameryce Północnej i Globalnej}
+        \label{fig:reg-NA}
+    \end{minipage}
+\end{figure}
+
+Samo to ogromne podobieństwo rzeczywiście pokazuje dlaczego \texttt{NA\_Sales} jest atrybutem który ma największy wpływ na wynik.
+
+
 \section{Wnioski}\label{sec:wnioski}
 
-TODO - do napisania.
+Analiza danych o sprzedaży gier wideo pokazała, że mimo dostępności wielu informacji,
+przewidywanie globalnej sprzedaży wyłącznie na podstawie cech takich jak platforma, wydawca, rok wydania i gatunek okazuje się niezwykle trudne.
+Modele regresyjne, nawet zaawansowane jak XGBoost, osiągały niezadowalające wyniki,
+co wskazuje na brak wystarczającej informacji w dostępnych zmiennych.
+
+Eksperymenty z dodaniem cząstkowych danych o sprzedaży (np.~w Ameryce Północnej i Japonii) znacząco poprawiły jakość predykcji,
+co nie dziwi, biorąc pod uwagę wysoką korelację tych wartości z wynikiem globalnym.
+Najlepsze wyniki pod względem RMSE oraz \( R^2 \) osiągała klasyczna regresja liniowa, co może sugerować,
+że w kontekście silnie skorelowanych zmiennych prostsze modele mogą być bardziej efektywne i stabilne niż metody nieliniowe.
+
+Najważniejszą cechą wpływającą na wynik okazała się sprzedaż w Ameryce Północnej.
+To właśnie ta zmienna — kiedy była dostępna — pozwalała najlepiej przybliżyć wartość globalną.
+W przypadku jej braku, najważniejszą zmienną staje się wydawca.
+Co zdaje się mieć dużo sensu, gdyż to od wydawcy często zależy spora część marketingu, oraz ogólnej świadomości społeczeństwa graczy o danym tytule, oraz dystrybucji,
+a wszystkie te czynniki zdecydowanie przekładają się na sprzedaż, więc nic dziwnego że wydawcy-kolosi na rynku mają znacznie lepsze wyniki od wydawców niezależnych
+pomimo popularności, jaką cały czas cieszą się gry niezależne (ang.~Indie-games) to jednak ``Klasyki'' wydawane przez największych uzyskują najlepsze wyniki sprzedażowe.
+
+Wnioski te sugerują, że do budowy modeli skutecznie przewidujących sukces rynkowy gier potrzebne są bardziej złożone i kontekstowe dane:
+informacje o jakości gier, ich recenzjach, potencjalnie o budżetach marketingowych, czy  dacie premiery
+(np.~względem świąt, albo innych okresów zakupowych), a także konkurencji rynkowej w danym czasie.
+
+Mimo ograniczeń zbioru danych uważam, że przeprowadzona analiza pozwala lepiej zrozumieć rynek sprzedaży gier, oraz
+znaczenie poszczególnych rynków lokalnych na sprzedaż globalną.
+Znaczną trudnością okazały się ograniczenia klasycznych modeli regresyjnych w zadaniach predykcyjnych,
+gdy dane wejściowe są ubogie, ale pokazuje to jak skomplikowana w rzeczywistości jest sprzedaż na badanym rynku, bo zdecydowanie nie da się jej ograniczyć tylko do tych kilku parametrów.
 
 
 
