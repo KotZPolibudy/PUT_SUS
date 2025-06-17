@@ -265,23 +265,103 @@ XGBoost          & 0.531 & 1.988 & 0.096 & 395.26\% \\
 \label{tab:model_comparison}
 \end{table}
 
+Wszystkie trzy modele osiągają bardzo niskie wartości współczynnika determinacji \( R^2 \),
+co oznacza, że praktycznie nie wyjaśniają zmienności globalnej sprzedaży.
+Mimo że XGBoost nieznacznie przewyższa pozostałe podejścia, różnice są marginalne.
+Ekstremalnie wysokie MAPE, jak i wysokie wartości RMSE wskazują,
+że modele mają trudności z trafnym przewidywaniem wartości sprzedaży.
+
+Zjawisko to może wynikać z braku istotnych danych w zbiorze — np.~jakości gry, marketingu, daty premiery względem świąt lub ówczesnej konkurencji rynkowej.
+
+Mimo to zdecydowałem się zbadać ważność kryteriów, poprzez wizualizację drzewa, oraz wykres ważności cech w XGBoost:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/drzewo1}
+    \caption{Wizualizacja drzewa decyzyjnygo}
+    \label{fig:tree1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/xgboost1}
+    \caption{Ważność cech według modelu XGBoost}
+    \label{fig:xgb_importance1}
+\end{figure}
 
 
+Moim kolejnym pomysłem było wytrenowanie podobnych modeli, ale tym razem dając im dostęp do cząstkowych danych o sprzedaży.
+Oczywiście, bezsensowne jest dawanie modelom dostępu do wszystkich danych o cząstkowej sprzedaży, jednak z czystej ciekawości postanowiłem to zrobić mimochodem:
 
-\subsection{Regresja Liniowa}\label{subsec:regresja-liniowa}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{R\textsuperscript{2}} & \textbf{MAPE} \\
+\hline
+Regresja liniowa & 0.003 & 0.005 & 1.000 & 3.16\% \\
+Drzewo regresji  & 0.171 & 0.845 & 0.837 & 126.26\% \\
+XGBoost          & 0.055 & 0.916 & 0.808 & 13.69\% \\
+\hline
+\end{tabular}
+\caption{Porównanie skuteczności modeli regresyjnych}
+\label{tab:model_comparison2}
+\end{table}
 
-Model regresji liniowej jest na tyle prosty, że może służyć jako punkt odniesienia.
-Jego prostota pozwala lepiej zrozumieć zależność między badanymi cechami a sprzedażą
+Nawet tutaj, okazuje się, że model oparty o drzewo decyzyjne osiąga znacznie gorsze wyniki,
+co było i nadal jest dla mnie zaskoczeniem.
+Przy tak silnie skorelowanych danych, nawet XGBoost osiągnął gorsze wyniki od regresji liniowej,
+ale nie ma się czemu dziwić, korelacja między składowymi a sumą jest oczywiście bardzo duża.
 
-\subsection{Drzewo regresji}\label{subsec:drzewo-regresji}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/xgboost-all}
+    \caption{Ważność cech według modelu XGBoost dla wszystkich danych}
+    \label{fig:xgb_importance2}
+\end{figure}
 
-Spodziewałbym się, że model drzewa przyniesie znaczną poprawę względem modelu liniowego, lecz ku mojemu zaskoczeniu
+W przypadku pozostawienia jedynie dwóch znanych składowych, a więc sprzedaży w stanach~(\texttt{NA\_Sales}),
+oraz sprzedaży w Japonii~(\texttt{Japan\_Sales}),
+można stworzyć modele prognozujące sprzedaż globalną trochę dokładniej, chociaż najlepiej byłoby stworzyć takie,
+które nie opierają się na żadnej cząstkowej sprzedaży.
 
-\subsection{XGBoost}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{R\textsuperscript{2}} & \textbf{MAPE} \\
+\hline
+Regresja liniowa & 0.157 & 0.495 & 0.944 & 99.23\% \\
+Drzewo regresji  & 0.200 & 0.909 & 0.811 & 125.08\% \\
+XGBoost          & 0.145 & 1.113 & 0.717 & 59.42\% \\
+\hline
+\end{tabular}
+\caption{Porównanie skuteczności modeli regresyjnych (na danych z USA i Japonii)}
+\label{tab:model_comparison3}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/tree-last}
+    \caption{Wizualizacja drzewa decyzyjnygo}
+    \label{fig:tree-last}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/xgboost-last}
+    \caption{Ważność cech według modelu XGBoost}
+    \label{fig:xgb_importance-last}
+\end{figure}
+
+\section{Wnioski}\label{sec:wnioski}
+
+TODO - do napisania.
+
 
 
 \section{Link do repozytorium}\label{sec:link-do-repo}
 Kod źródłowy w repozytorium GitHub dostępny pod linkiem: \\
-\href{https://github.com/KotZPolibudy/PUT_SUS/zdataset-analiza}{Repozytorium}.
+\href{https://github.com/KotZPolibudy/PUT_SUS/tree/main/zdataset-analiza}{Repozytorium}.
 
 \end{document}
