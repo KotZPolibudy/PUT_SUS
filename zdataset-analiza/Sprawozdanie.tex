@@ -60,6 +60,34 @@ Zbiór zawiera również brakujące wartości. \\
 \textbf{Publisher} ma 58 brakujących wartości, oraz \\
 \textbf{Year} ma 271 brakujących wartości.
 
+Przykładowe rekordy ze zbioru danych przedstawia~\ref{tab:przykladowe-rekordy}.
+
+\begin{table}[H]
+\small
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|l|c|c|l|l|r|r|r|r|r|}
+\hline
+\textbf{Rank} & \textbf{Name} & \textbf{Platform} & \textbf{Year} & \textbf{Genre} & \textbf{Publisher} & \textbf{NA} & \textbf{EU} & \textbf{JP} & \textbf{Other} & \textbf{Global} \\
+\hline
+1 & Wii Sports & Wii & 2006 & Sports & Nintendo & 41.49 & 29.02 & 3.77 & 8.46 & 82.74 \\
+2 & Super Mario Bros.~ & NES & 1985 & Platform & Nintendo & 29.08 & 3.58 & 6.81 & 0.77 & 40.24 \\
+2122 & Grand Theft Auto: San Andreas & PC & 2005 & Action & Take-Two & 0.00 & 0.92 & 0.00 & 0.05 & 0.98 \\
+2128 & Tamagotchi Conn.: CS2 & DS & 2006 & Simulation & Namco Bandai & 0.09 & 0.02 & 0.86 & 0.01 & 0.98 \\
+12751 & Rainbow Six: Critical Hour & XB & N/A & Shooter & Unknown & 0.04 & 0.01 & 0.00 & 0.00 & 0.06 \\
+12752 & Gothic 3 & PC & 2006 & Role-Playing & JoWood & 0.00 & 0.05 & 0.00 & 0.01 & 0.06 \\
+15912 & Kao the Kangaroo R2 & PS2 & 2005 & Platform & JoWood & 0.01 & 0.01 & 0.00 & 0.00 & 0.02 \\
+\hline
+\end{tabular}%
+}
+\caption{Przykładowe rekordy ze zbioru danych}
+\label{tab:przykladowe-rekordy}
+\end{table}
+
+Znajduje się tam też rekord, w którym brakuje danych, ale wystarczy wyszukać w sieci tytuł tej gry aby dowiedzieć się, że Rainbow Six: Critical Hour został wydany w 2006 r.~przez Ubisoft.
+
+
+
 \section{Eksploracja danych}\label{sec:eksploracja-danych}
 
 \subsection{Histogramy zmiennych ilościowych}\label{subsec:histogramy-zmiennych-ilosciowych}
@@ -404,7 +432,6 @@ Mimo ograniczeń zbioru danych uważam, że przeprowadzona analiza pozwala lepie
 znaczenie poszczególnych rynków lokalnych na sprzedaż globalną.
 Znaczną trudnością okazały się ograniczenia klasycznych modeli regresyjnych w zadaniach predykcyjnych,
 gdy dane wejściowe są ubogie, ale pokazuje to jak skomplikowana w rzeczywistości jest sprzedaż na badanym rynku, bo zdecydowanie nie da się jej ograniczyć tylko do tych kilku parametrów.
-
 
 
 \section{Link do repozytorium}\label{sec:link-do-repo}
