@@ -72,7 +72,7 @@ Sugeruje to obecność efektu długiego ogona typowego dla rynku gier, jak i dla
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/histogramy}
-    \caption{}
+    \caption{Histogramy przedstawiające rozkład danych}
     \label{fig:histogramy}
 \end{figure}
 
@@ -136,7 +136,7 @@ Przede wszystkim, zdecydowałem się zbadać jakie są najpopularniejsze gatunki
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/Genre-Publisher}
-    \caption{Liczba unikanlych gier z danego gatunku, dla danych wydawców}
+    \caption{Liczba unikalnych gier z danego gatunku, dla danych wydawców}
     \label{fig:wydawcy0}
 \end{figure}
 
@@ -170,7 +170,7 @@ potencjalnie faworyzując wydawców jednego lub dwóch hitów, ale nie znanych s
 
 \subsection{Badanie gatunków}\label{subsec:badanie-gatunkow}
 Badając dalej zbiór danych zdecydowałem się przyjrzeć bliżej gatunkom gier występującym w datasecie.
-Istnieje tutaj gatunek ``Mist'' oznaczający tyle co gatunek ``Inny''.
+Istnieje tutaj gatunek ``Misc'' oznaczający tyle co gatunek ``Inny'' (z ang.~ Miscellaneous).
 Jest on o tyle ciekawym przypadkiem, że pomimo bycia trzecim najczęstszym gatunkiem, nie odzwierciedla tego wcale sprzedaż globalna dla tego gatunku, jak widać na~\ref{fig:gat} oraz na~\ref{fig:gat2}.
 
 \begin{figure}[H]
@@ -185,7 +185,7 @@ Jest on o tyle ciekawym przypadkiem, że pomimo bycia trzecim najczęstszym gatu
     \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/gatunek-ilosc}
-        \caption{Ilośc gier sprzedanych dla danych gatunków}
+        \caption{Ilość gier wydanych dla danych gatunków}
         \label{fig:gat2}
     \end{minipage}
 \end{figure}
@@ -207,7 +207,7 @@ Początkowo, wykonałem podobne zestawienia jak powyżej:
     \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/platforma-ilosc}
-        \caption{Ilośc gier sprzedanych na danej platformie}
+        \caption{Ilość gier wydanych na danej platformie}
         \label{fig:platform2}
     \end{minipage}
 \end{figure}
@@ -216,24 +216,68 @@ Jednak to nie koniec, bo znacznie więcej informacji można wyciągnąć z zesta
 
 \begin{figure}[H]
     \centering
-    \includegraphics{figures/rokplatforma-sprzedaz}
-    \caption{Sprzedaż według platformy i roku}
+    \includegraphics[width=\linewidth]{figures/rokplatforma-sprzedaz}
+    \caption{Sprzedaż gier według platformy i roku}
     \label{fig:platform-year-sales}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics{figures/rokplatforma-ilosc}
-    \caption{Ilośc gier według platformy i roku}
+    \includegraphics[width=\linewidth]{figures/rokplatforma-ilosc}
+    \caption{Ilość gier wydanych według platformy i roku}
     \label{fig:platform-year-count}
 \end{figure}
 
 Przede wszystkim nasuwają się oczywiste wnioski, że żadna z badanych platform nie ma długiego życia.
-Co roku właściwie pojawiały się na rynku nowe platformy, podbierając część klientów od ``głównych graczy''.
+Co roku właściwie pojawiały się na rynku nowe platformy, podbierając część klientów od ``głównych graczy'', aby za jakiś czas zostać wypartymi z rynku przez inne, nowsze platformy do gry.
+Szczególnie widać to po serii PlayStation, gdzie gdy w 2000.~roku pojawia się PS2, to sprzedaż dla PS znacznie maleje na rzecz wzrostu tej na nowej generacji.
+Ostatnie lata przedstawione na wykresie mogą być skrzywione ze względu na brakujące dane, wspomniane znacznie wcześniej w tym raporcie.
+Biorąc to pod uwagę, można zauważyć wyjątkowo długie ``życie'' platformy PC - co ma przełożenie również i w 2025 roku, gdzie gry wideo na komputerach, zamiast na dedykowanych konsolach, nadal są bardzo popularne.
+Głównym czynnikiem może być to, że w przypadku PC nie wyznacza się generacji, przez co nie ma ograniczeń technologicznych związanych z przestarzałą technologią.
 
 
 
-\section{Wyniki predykcji modeli}\label{sec:wyniki-predykcji-modeli}
+\section{Modelowanie sprzedaży gier}\label{sec:modelowanie-sprzedazy-gier}
+
+W celu przewidywania globalnej sprzedaży gier (\texttt{Global\_Sales}),
+wytrenowałem kilka modeli regresyjnych, bazując na dostępnych cechach (rok, platforma, wydawca oraz gatunek.
+Dane poddałem odpowiedniemu przetworzeniu: brakujące wartości zostały uzupełniłem bądź usunąłem (gdzie nie udało się znaleźć tych danych),
+następnie przy użyciu one-hot encoding zakodowałem, a dane liczbowe znormalizowałem tam, gdzie było to wymagane.
+
+Ocenę modeli opieram na czterech metrykach:\\
+MAE - średni błąd bezwzględny\\
+RMSE - pierwiastka z błędu średniokwadratowego\\
+współczynnika \( R^2 \)\\
+oraz MAPE - średniego procentowego błędu bezwzględnego.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{R\textsuperscript{2}} & \textbf{MAPE} \\
+\hline
+Regresja liniowa & 0.563 & 1.993 & 0.092 & 395.33\% \\
+Drzewo regresji  & 0.583 & 2.103 & -0.012 & 514.01\% \\
+XGBoost          & 0.531 & 1.988 & 0.096 & 395.26\% \\
+\hline
+\end{tabular}
+\caption{Porównanie skuteczności modeli regresyjnych}
+\label{tab:model_comparison}
+\end{table}
+
+
+
+
+\subsection{Regresja Liniowa}\label{subsec:regresja-liniowa}
+
+Model regresji liniowej jest na tyle prosty, że może służyć jako punkt odniesienia.
+Jego prostota pozwala lepiej zrozumieć zależność między badanymi cechami a sprzedażą
+
+\subsection{Drzewo regresji}\label{subsec:drzewo-regresji}
+
+Spodziewałbym się, że model drzewa przyniesie znaczną poprawę względem modelu liniowego, lecz ku mojemu zaskoczeniu
+
+\subsection{XGBoost}
 
 
 \section{Link do repozytorium}\label{sec:link-do-repo}
